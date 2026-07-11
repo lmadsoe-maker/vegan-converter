@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Clock, Users, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import brain from 'brain';
+import { apiClient } from 'app';
 import type { VeganWeaponsResponse, VeganWeapon, GetVeganWeaponsParams } from 'types';
 import { trackVeganWeapons, trackUserEngagement } from 'utils/analytics';
 import Footer from 'components/Footer';
@@ -25,7 +25,7 @@ const VeganWeapons = () => {
       const queryParams: GetVeganWeaponsParams = category && category !== 'all' ? { category } : {};
       console.log('Query params:', queryParams);
       
-      const response = await brain.get_vegan_weapons(queryParams);
+      const response = await apiClient.get_vegan_weapons(queryParams);
       console.log('Response status:', response.status);
       console.log('Response headers:', response.headers);
       
