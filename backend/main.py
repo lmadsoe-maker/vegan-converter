@@ -70,6 +70,29 @@ def create_app() -> FastAPI:
         print(f"Error loading API routers: {e}")
         import traceback
         traceback.print_exc()
+
+    # Define catch-all route BEFORE mounting static files
+    # This ensures SPA routes like /convert get served index.html
+    static_path = pathlib.Path("/app/frontend/dist")
+
+    @app.get("/{full_path:path}")
+    async def serve_spa(full_path: str):
+        """Serve index.html for all SPA routes"""
+        # Check if it's a static asset
+        file_path = static_path / full_path
+        if file_path.exists() and file_path.is_file():
+            from fastapi.responses import FileResponse
+            return FileResponse(file_path)
+
+        # Otherwise serve index.html for client-side routing
+        index_path = static_path / "index.html"
+        if index_path.exists():
+            from fastapi.responses import HTMLResponse
+            with open(index_path, "r") as f:
+                return HTMLResponse(content=f.read())
+
+        return {"error": "Not found"}
+
     return app
 
 
@@ -82,22 +105,10 @@ async def health_check():
     return {"status": "ok", "environment": os.getenv("ENV", "dev")}
 
 
-# Mount static frontend files for SPA routing
+# Print startup message
 static_path = pathlib.Path("/app/frontend/dist")
 if static_path.exists():
-    app.mount("/", StaticFiles(directory=str(static_path), html=True), name="static")
     print(f"✓ Frontend served from {static_path}")
 else:
     print(f"✗ Frontend dist not found at {static_path}")
-
-# Catch-all route for SPA: serve index.html for any unmatched routes
-@app.get("/{full_path:path}")
-async def catch_all(full_path: str):
-    """Serve index.html for all SPA routes"""
-    index_path = static_path / "index.html"
-    if index_path.exists():
-        with open(index_path, "r") as f:
-            from fastapi.responses import HTMLResponse
-            return HTMLResponse(content=f.read())
-    return {"error": "index.html not found"}
 
