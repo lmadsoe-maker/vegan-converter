@@ -82,11 +82,22 @@ async def health_check():
     return {"status": "ok", "environment": os.getenv("ENV", "dev")}
 
 
-# Mount static frontend files
+# Mount static frontend files for SPA routing
 static_path = pathlib.Path("/app/frontend/dist")
 if static_path.exists():
     app.mount("/", StaticFiles(directory=str(static_path), html=True), name="static")
     print(f"✓ Frontend served from {static_path}")
 else:
     print(f"✗ Frontend dist not found at {static_path}")
+
+# Catch-all route for SPA: serve index.html for any unmatched routes
+@app.get("/{full_path:path}")
+async def catch_all(full_path: str):
+    """Serve index.html for all SPA routes"""
+    index_path = static_path / "index.html"
+    if index_path.exists():
+        with open(index_path, "r") as f:
+            from fastapi.responses import HTMLResponse
+            return HTMLResponse(content=f.read())
+    return {"error": "index.html not found"}
 
