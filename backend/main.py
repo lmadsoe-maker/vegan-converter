@@ -73,11 +73,19 @@ def create_app() -> FastAPI:
 
     # Serve frontend static files
     frontend_path = pathlib.Path(__file__).parent.parent / "frontend_dist"
+    print(f"Looking for frontend at: {frontend_path}")
     if frontend_path.exists():
         app.mount("/", StaticFiles(directory=str(frontend_path), html=True), name="frontend")
-        print(f"Frontend served from {frontend_path}")
+        print(f"✅ Frontend served from {frontend_path}")
     else:
-        print(f"Frontend static files not found at {frontend_path}")
+        # Try alternate path
+        alt_path = pathlib.Path("/app/frontend_dist")
+        print(f"Not found at {frontend_path}, trying {alt_path}")
+        if alt_path.exists():
+            app.mount("/", StaticFiles(directory=str(alt_path), html=True), name="frontend")
+            print(f"✅ Frontend served from {alt_path}")
+        else:
+            print(f"❌ Frontend static files not found at {frontend_path} or {alt_path}")
 
     return app
 
