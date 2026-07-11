@@ -29,10 +29,9 @@ export default function Convert() {
   const [showCamera, setShowCamera] = useState(false);
   const [isCameraLoading, setIsCameraLoading] = useState(false);
   
-  // Mobile detection
-  const isMobile = () => {
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
-           (window.innerWidth <= 768 && 'ontouchstart' in window);
+  // Check if camera is available (desktop and mobile)
+  const isCameraAvailable = () => {
+    return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
   };
 
   // Helper function for automatic conversion after photo OCR
@@ -100,8 +99,8 @@ export default function Convert() {
 
   // Camera functionality
   const handleTakePhoto = async () => {
-    if (!isMobile()) {
-      toast.error("Camera feature is only available on mobile devices");
+    if (!isCameraAvailable()) {
+      toast.error("Camera not available on this device or browser");
       return;
     }
 
@@ -259,8 +258,8 @@ export default function Convert() {
             <div className="mb-6">
               <h2 className="text-xl sm:text-2xl font-bold text-black mb-3 lowercase">take a photo of recipe</h2>
               
-              {/* Camera button for mobile - Primary input method */}
-              {true && (
+              {/* Camera button - Works on desktop and mobile */}
+              {isCameraAvailable() && (
                 <div className="mb-4">
                   <Button
                     onClick={handleTakePhoto}
