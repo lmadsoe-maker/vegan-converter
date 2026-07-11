@@ -224,7 +224,11 @@ Converted Plant-Based Recipe:"""
         )
         
     except Exception as e:
+        print(f"[ERROR] Recipe conversion failed: {str(e)}")
+        print(f"[ERROR] Exception type: {type(e).__name__}")
+        import traceback
+        traceback.print_exc()
         raise HTTPException(
-            status_code=500, 
-            detail="Failed to convert recipe. Please try again or contact support."
+            status_code=500,
+            detail=f"Failed to convert recipe: {str(e)}"
         )
