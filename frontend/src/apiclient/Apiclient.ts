@@ -67,6 +67,7 @@ export class Apiclient<SecurityDataType = unknown> extends HttpClient<SecurityDa
     this.request<any, any>({
       path: `/convert-recipe`,
       method: "POST",
+      type: "application/json",
       body: data,
       ...params,
     });
@@ -83,6 +84,7 @@ export class Apiclient<SecurityDataType = unknown> extends HttpClient<SecurityDa
     this.request<any, any>({
       path: `/photo-analysis`,
       method: "POST",
+      type: "application/json",
       body: data,
       ...params,
     });
