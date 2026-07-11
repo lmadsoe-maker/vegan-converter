@@ -148,7 +148,7 @@ Converted Plant-Based Recipe:"""
                 },
                 {"role": "user", "content": prompt}
             ],
-            max_tokens=1500,
+            max_completion_tokens=1500,
             temperature=0.7
         )
         

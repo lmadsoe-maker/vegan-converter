@@ -126,7 +126,7 @@ async def analyze_photo(request: PhotoAnalysisRequest) -> PhotoAnalysisResponse:
                         ]
                     }
                 ],
-                max_tokens=1500,
+                max_completion_tokens=1500,
                 temperature=0.1  # Low temperature for more consistent extraction
             )
         except Exception as api_error:
@@ -157,7 +157,7 @@ async def analyze_photo(request: PhotoAnalysisRequest) -> PhotoAnalysisResponse:
                                 ]
                             }
                         ],
-                        max_tokens=1500,
+                        max_completion_tokens=1500,
                         temperature=0.1
                     )
                 except Exception as retry_error:
