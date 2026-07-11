@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { ArrowLeft, ChefHat, Sparkles, Loader2, Copy, Check, Lightbulb, Camera, X } from "lucide-react";
 import { toast } from "sonner";
-import brain from "brain";
+import { apiClient } from "app";
 import { CameraCapture } from "components/CameraCapture";
 import { PhotoAnalysisRequest, PhotoAnalysisResponse } from "types";
 import { trackRecipeConversion, trackPhotoAnalysis, trackUserEngagement, trackConversionGoals } from "utils/analytics";
@@ -38,7 +38,7 @@ export default function Convert() {
   const convertRecipeFromText = async (recipeText: string) => {
     trackRecipeConversion.start('photo');
     try {
-      const response = await brain.convert_recipe({
+      const response = await apiClient.convert_recipe({
         original_recipe: recipeText
       });
       const result = await response.json();
@@ -62,7 +62,7 @@ export default function Convert() {
     trackRecipeConversion.start('text');
     
     try {
-      const response = await brain.convert_recipe({
+      const response = await apiClient.convert_recipe({
         original_recipe: recipe
       });
 
@@ -146,7 +146,7 @@ export default function Convert() {
         analysis_type: 'recipe' // Default to recipe analysis
       };
       
-      const response = await brain.analyze_photo(analysisRequest);
+      const response = await apiClient.analyze_photo(analysisRequest);
       const result: PhotoAnalysisResponse = await response.json();
       
       trackPhotoAnalysis.success(result.confidence);

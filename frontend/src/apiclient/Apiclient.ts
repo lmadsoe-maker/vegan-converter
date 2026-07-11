@@ -65,7 +65,7 @@ export class Apiclient<SecurityDataType = unknown> extends HttpClient<SecurityDa
    */
   convert_recipe = (data: { original_recipe: string }, params: RequestParams = {}) =>
     this.request<any, any>({
-      path: `/api/convert-recipe`,
+      path: `/convert-recipe`,
       method: "POST",
       body: data,
       ...params,
@@ -81,7 +81,7 @@ export class Apiclient<SecurityDataType = unknown> extends HttpClient<SecurityDa
    */
   analyze_photo = (data: { image_base64: string; analysis_type?: string }, params: RequestParams = {}) =>
     this.request<any, any>({
-      path: `/api/photo-analysis`,
+      path: `/photo-analysis`,
       method: "POST",
       body: data,
       ...params,
