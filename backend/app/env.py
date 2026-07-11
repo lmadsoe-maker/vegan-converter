@@ -17,7 +17,8 @@ class Mode(str, Enum):
     PROD = "production"
 
 
-mode = Mode.PROD if os.environ.get("DATABUTTON_SERVICE_TYPE") == "prodx" else Mode.DEV
+env_setting = os.environ.get("ENV", "dev").lower()
+mode = Mode.PROD if env_setting == "prod" else Mode.DEV
 
 __all__ = [
     "Mode",
