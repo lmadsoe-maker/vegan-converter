@@ -103,7 +103,7 @@ async def analyze_photo(request: PhotoAnalysisRequest) -> PhotoAnalysisResponse:
         # Call OpenAI Vision API with better error handling
         try:
             response = client.chat.completions.create(
-                model="gpt-4o-mini",  # Cost-optimized model with full vision
+                model="gpt-5.4-nano",  # Cost-optimized model with full vision
                 messages=[
                     {
                         "role": "system",
@@ -134,7 +134,7 @@ async def analyze_photo(request: PhotoAnalysisRequest) -> PhotoAnalysisResponse:
             if "image_parse_error" in str(api_error) or "unsupported image" in str(api_error):
                 try:
                     response = client.chat.completions.create(
-                        model="gpt-4o",
+                        model="gpt-5.4-nano",
                         messages=[
                             {
                                 "role": "system",
@@ -191,7 +191,7 @@ async def analyze_photo(request: PhotoAnalysisRequest) -> PhotoAnalysisResponse:
             
             try:
                 fallback_response = client.chat.completions.create(
-                    model="gpt-4o",
+                    model="gpt-5.4-nano",
                     messages=[
                         {
                             "role": "user",
