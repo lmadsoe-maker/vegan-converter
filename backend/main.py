@@ -46,7 +46,6 @@ def import_api_routers() -> APIRouter:
             print(f"Error importing {name}: {e}")
             continue
 
-    print(f"Registered routes: {[r.path for r in routes.routes]}")
     return routes
 
 
