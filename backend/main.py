@@ -52,7 +52,12 @@ def import_api_routers() -> APIRouter:
 def create_app() -> FastAPI:
     """Create the FastAPI app."""
     app = FastAPI()
-    app.include_router(import_api_routers())
+    try:
+        app.include_router(import_api_routers())
+    except Exception as e:
+        print(f"Error loading API routers: {e}")
+        import traceback
+        traceback.print_exc()
     return app
 
 
