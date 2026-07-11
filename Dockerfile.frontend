@@ -1,14 +1,12 @@
-FROM node:20-alpine AS build
+FROM node:20-alpine AS builder
 
-WORKDIR /app
+WORKDIR /workspace
 
-RUN corepack enable
+RUN corepack enable yarn
 
-COPY frontend/package.json frontend/yarn.lock ./
-RUN yarn install --frozen-lockfile
+COPY . .
 
-COPY frontend/ .
-RUN VITE_API_URL=${VITE_API_URL:-https://impartial-magic-production-4d73.up.railway.app} yarn build
+RUN cd frontend && yarn install --frozen-lockfile && VITE_API_URL=https://impartial-magic-production-4d73.up.railway.app yarn build
 
 FROM node:20-alpine
 
@@ -16,9 +14,8 @@ WORKDIR /app
 
 RUN npm install -g serve
 
-COPY --from=build /app/dist ./dist
+COPY --from=builder /workspace/frontend/dist ./dist
 
 EXPOSE 3000
 
-ENV PORT=3000
-CMD ["serve", "-s", "dist", "-l", "3000"]
+CMD ["sh", "-c", "serve -s dist -l ${PORT:-3000}"]
