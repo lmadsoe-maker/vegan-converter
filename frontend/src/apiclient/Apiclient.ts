@@ -54,4 +54,36 @@ export class Apiclient<SecurityDataType = unknown> extends HttpClient<SecurityDa
       method: "GET",
       ...params,
     });
+
+  /**
+   * @description Convert any recipe to a plant-based version
+   *
+   * @tags recipe_conversion
+   * @name convert_recipe
+   * @summary Convert Recipe
+   * @request POST:/api/convert-recipe
+   */
+  convert_recipe = (data: { original_recipe: string }, params: RequestParams = {}) =>
+    this.request<any, any>({
+      path: `/api/convert-recipe`,
+      method: "POST",
+      body: data,
+      ...params,
+    });
+
+  /**
+   * @description Analyze a photo to extract recipe or meal information
+   *
+   * @tags photo_analysis
+   * @name analyze_photo
+   * @summary Analyze Photo
+   * @request POST:/api/photo-analysis
+   */
+  analyze_photo = (data: { image_base64: string; analysis_type?: string }, params: RequestParams = {}) =>
+    this.request<any, any>({
+      path: `/api/photo-analysis`,
+      method: "POST",
+      body: data,
+      ...params,
+    });
 }

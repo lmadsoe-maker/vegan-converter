@@ -76,58 +76,7 @@ export default function Convert() {
     } catch (error) {
       console.error("Conversion error:", error);
       trackRecipeConversion.error('text', error instanceof Error ? error.message : 'api_error');
-
-      // Fallback demo conversion for testing purposes
-      const demoResult: ConversionResult = {
-        converted_recipe: `**Plant-Based Conversion Complete!**
-
-**Ingredients:**
-• 1 block (14 oz) extra-firm tofu, pressed and cubed (replaces chicken)
-• 2 cups whole wheat breadcrumbs
-• 1/2 cup nutritional yeast (replaces parmesan)
-• 2 flax eggs (2 tbsp ground flaxseed + 6 tbsp water, replaces eggs)
-• 2 cups marinara sauce
-• 2 tbsp olive oil
-• 1 tsp garlic powder
-• 1 tsp Italian herbs
-• Salt and pepper to taste
-• Use Vegan Mayo from Vegan Weapons (See Vegan Weapons library for recipe)
-
-**Instructions:**
-1. Press tofu for 30 minutes to remove excess water, then cube
-2. Prepare flax eggs and let sit for 5 minutes to thicken
-3. Mix breadcrumbs with nutritional yeast, garlic powder, and herbs
-4. Dip tofu cubes in flax egg mixture, then coat with breadcrumb mixture
-5. Bake at 400°F for 25-30 minutes until golden and crispy
-6. Serve over pasta with marinara sauce and a dollop of Vegan Mayo
-
-**Nutritional Benefits:**
-This plant-based version provides complete protein from tofu, B-vitamins from nutritional yeast, and fiber from whole grains.`,
-        substitutions_made: [
-          "Chicken breast → Extra-firm tofu (provides complete protein)",
-          "Parmesan cheese → Nutritional yeast (adds cheesy flavor + B12)",
-          "Eggs → Flax eggs (binding agent from ground flaxseed)",
-          "Butter → Olive oil (heart-healthy plant fat)",
-          "Using Vegan Weapons: Vegan Mayo"
-        ],
-        cooking_tips: [
-          "Press tofu for 30+ minutes for firmer texture and better flavor absorption",
-          "Nutritional yeast adds umami depth - start with 1/2 cup and adjust to taste",
-          "Flax eggs work best when mixed 5 minutes before use to achieve proper consistency",
-          "Use Vegan Weapons library for consistent, tested sauces and dressings",
-          "Check the Vegan Weapons section for detailed recipes of referenced items"
-        ],
-        vegan_weapons_used: [
-          {
-            name: "Vegan Mayo",
-            category: "sauces",
-            description: "Creamy, egg-free mayonnaise using aquafaba."
-          }
-        ]
-      };
-
-      setConvertedRecipe(demoResult);
-      toast.success("Recipe converted successfully! (Demo mode - upgrade API plan for full functionality)");
+      toast.error("Failed to convert recipe. Please try again.");
     } finally {
       setIsLoading(false);
     }
