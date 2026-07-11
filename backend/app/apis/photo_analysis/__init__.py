@@ -16,7 +16,7 @@ class PhotoAnalysisResponse(BaseModel):
     confidence: str
     suggestions: list[str]
 
-@router.post("/analyze-photo")
+@router.post("/photo-analysis")
 async def analyze_photo(request: PhotoAnalysisRequest) -> PhotoAnalysisResponse:
     """
     Analyze a photo using OpenAI Vision API to extract recipe text or identify dishes.
