@@ -66,8 +66,8 @@ const buildVariables = () => {
 
 	const defines: Record<string, string> = {
 		__APP_ID__: JSON.stringify(appId),
-		__API_PATH__: JSON.stringify(process.env.API_PATH),
-		__API_HOST__: JSON.stringify(""),
+		__API_PATH__: JSON.stringify(process.env.API_PATH || "/api"),
+		__API_HOST__: JSON.stringify(process.env.VITE_API_URL || ""),
 		__API_PREFIX_PATH__: JSON.stringify(""),
 		__API_URL__: JSON.stringify(process.env.VITE_API_URL || "http://localhost:8000"),
 		__WS_API_URL__: JSON.stringify("ws://localhost:8000"),
