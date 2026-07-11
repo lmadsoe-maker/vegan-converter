@@ -3,6 +3,7 @@ import pathlib
 import json
 import dotenv
 from fastapi import FastAPI, APIRouter
+from fastapi.staticfiles import StaticFiles
 
 # Load environment files
 dotenv.load_dotenv(".env")
@@ -58,6 +59,13 @@ def create_app() -> FastAPI:
         print(f"Error loading API routers: {e}")
         import traceback
         traceback.print_exc()
+
+    # Serve static frontend files
+    static_path = pathlib.Path(__file__).parent.parent / "static"
+    if static_path.exists():
+        app.mount("/", StaticFiles(directory=str(static_path), html=True), name="static")
+        print(f"Serving frontend from {static_path}")
+
     return app
 
 
