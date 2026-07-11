@@ -84,14 +84,16 @@ async def health_check():
 
 # Mount static frontend files
 static_path = pathlib.Path(__file__).parent.parent / "frontend" / "dist"
+if not static_path.exists():
+    # In container, main.py is at /app/main.py, so try the direct path
+    static_path = pathlib.Path("/app/frontend/dist")
+
 print(f"Looking for static files at: {static_path}")
 print(f"Static path exists: {static_path.exists()}")
+
 if static_path.exists():
-    print(f"Static files found. Files: {list(static_path.glob('*'))[:5]}")
+    print(f"Static files found. Mounting at /")
     app.mount("/", StaticFiles(directory=str(static_path), html=True), name="static")
 else:
     print(f"Warning: Static files not found at {static_path}")
-    print(f"Parent directory exists: {static_path.parent.exists()}")
-    if static_path.parent.exists():
-        print(f"Contents of {static_path.parent}: {list(static_path.parent.iterdir())}")
 
