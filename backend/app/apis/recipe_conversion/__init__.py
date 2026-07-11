@@ -140,7 +140,7 @@ Converted Plant-Based Recipe:"""
 
         # Call OpenAI API
         response = client.chat.completions.create(
-            model="gpt-4-turbo",
+            model="gpt-5.4-nano",
             messages=[
                 {
                     "role": "system", 
