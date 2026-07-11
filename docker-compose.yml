@@ -3,25 +3,26 @@ version: '3.8'
 services:
   backend:
     build:
-      context: ./backend
+      context: .
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
     environment:
-      - ENV=dev
-      - DATABASE_URL_DEV=${DATABASE_URL_DEV}
+      - ENV=prod
+      - DATABASE_URL_PROD=${DATABASE_URL_PROD}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
-    volumes:
-      - ./backend:/app
-    command: uv run uvicorn main:app --reload --host 0.0.0.0 --port 8000
+      - PORT=8000
+    restart: unless-stopped
 
   frontend:
     build:
-      context: ./frontend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: frontend/Dockerfile
     ports:
       - "3000:3000"
+    environment:
+      - VITE_API_URL=https://impartial-magic-production-4d73.up.railway.app
+      - PORT=3000
     depends_on:
       - backend
-    environment:
-      - VITE_API_URL=http://localhost:8000
+    restart: unless-stopped
