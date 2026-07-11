@@ -13,25 +13,19 @@ const Footer = () => {
             </p>
           </div>
           
-          {/* Contact information */}
+          {/* Created by */}
           <div className="text-center md:text-right">
             <p className="text-gray-800 font-medium text-sm">
-              Created by <span className="text-primary font-bold">Laila Madsø</span>
+              Created by{" "}
+              <a
+                href="https://ailamedia.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary font-bold hover:underline transition-colors"
+              >
+                Laila Madsø for Ailamedia.com
+              </a>
             </p>
-            <div className="flex flex-col md:items-end space-y-1 mt-2">
-              <a 
-                href="mailto:lmadsoe@gmail.com" 
-                className="text-gray-600 hover:text-primary text-sm transition-colors"
-              >
-                lmadsoe@gmail.com
-              </a>
-              <a 
-                href="tel:+4741100088" 
-                className="text-gray-600 hover:text-primary text-sm transition-colors"
-              >
-                +47 411 00 088
-              </a>
-            </div>
           </div>
         </div>
         
