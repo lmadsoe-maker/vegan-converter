@@ -4,6 +4,7 @@ import json
 import dotenv
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 # Load environment files
 dotenv.load_dotenv(".env")
@@ -79,3 +80,12 @@ app = create_app()
 async def health_check():
     """Health check endpoint."""
     return {"status": "ok", "environment": os.getenv("ENV", "dev")}
+
+
+# Mount static frontend files
+static_path = pathlib.Path(__file__).parent.parent / "frontend" / "dist"
+if static_path.exists():
+    app.mount("/", StaticFiles(directory=str(static_path), html=True), name="static")
+else:
+    print(f"Warning: Static files not found at {static_path}")
+
