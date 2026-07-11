@@ -103,7 +103,7 @@ async def analyze_photo(request: PhotoAnalysisRequest) -> PhotoAnalysisResponse:
         # Call OpenAI Vision API with better error handling
         try:
             response = client.chat.completions.create(
-                model="gpt-5.6-luna",  # Cost-optimized with full vision support
+                model="gpt-4o",  # Use GPT-4 with vision capabilities
                 messages=[
                     {
                         "role": "system",
