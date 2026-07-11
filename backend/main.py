@@ -58,12 +58,19 @@ def create_app() -> FastAPI:
     # Add CORS middleware to allow frontend to call backend API
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],  # Allow all origins (for development/production)
+        allow_origins=["*"],
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
     )
 
+    # Health check endpoint (define first so it takes priority)
+    @app.get("/health")
+    async def health_check():
+        """Health check endpoint."""
+        return {"status": "ok", "environment": os.getenv("ENV", "dev")}
+
+    # Include API routers
     try:
         app.include_router(import_api_routers())
     except Exception as e:
@@ -71,38 +78,32 @@ def create_app() -> FastAPI:
         import traceback
         traceback.print_exc()
 
-    # Define catch-all route BEFORE mounting static files
-    # This ensures SPA routes like /convert get served index.html
+    # SPA static file and catch-all routing (define last so it catches everything else)
     static_path = pathlib.Path("/app/frontend/dist")
 
     @app.get("/{full_path:path}")
     async def serve_spa(full_path: str):
-        """Serve index.html for all SPA routes"""
+        """Serve static files or index.html for SPA routing"""
         # Check if it's a static asset
         file_path = static_path / full_path
         if file_path.exists() and file_path.is_file():
             from fastapi.responses import FileResponse
             return FileResponse(file_path)
 
-        # Otherwise serve index.html for client-side routing
+        # Serve index.html for client-side routes
         index_path = static_path / "index.html"
         if index_path.exists():
             from fastapi.responses import HTMLResponse
             with open(index_path, "r") as f:
                 return HTMLResponse(content=f.read())
 
-        return {"error": "Not found"}
+        from fastapi.responses import JSONResponse
+        return JSONResponse({"error": "Not found"}, status_code=404)
 
     return app
 
 
 app = create_app()
-
-
-@app.get("/health")
-async def health_check():
-    """Health check endpoint."""
-    return {"status": "ok", "environment": os.getenv("ENV", "dev")}
 
 
 # Print startup message
