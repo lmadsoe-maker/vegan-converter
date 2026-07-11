@@ -4,6 +4,7 @@ import json
 import dotenv
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 # Load environment files
 dotenv.load_dotenv(".env")
@@ -69,6 +70,15 @@ def create_app() -> FastAPI:
         print(f"Error loading API routers: {e}")
         import traceback
         traceback.print_exc()
+
+    # Serve frontend static files
+    frontend_path = pathlib.Path(__file__).parent.parent / "frontend_dist"
+    if frontend_path.exists():
+        app.mount("/", StaticFiles(directory=str(frontend_path), html=True), name="frontend")
+        print(f"Frontend served from {frontend_path}")
+    else:
+        print(f"Frontend static files not found at {frontend_path}")
+
     return app
 
 
