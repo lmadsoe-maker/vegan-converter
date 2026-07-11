@@ -110,11 +110,11 @@ make run-frontend
 
 Uses **Neon PostgreSQL** (managed). Connection strings are in `.env.dev` and `.env.prod`.
 
-To claim database ownership after export:
+The database connection should already be configured. If you need to claim Stack Auth ownership:
 1. Visit your Riff app settings
-2. Click "Transfer Database Ownership"
-3. Follow the claim link
-4. Connection strings in `.env` files will continue to work
+2. Click "Claim Stack Auth Ownership" 
+3. Follow the link to transfer to your own account
+4. Database and app connection strings remain functional
 
 ## What Doesn't Work (Post-Export)
 
