@@ -81,16 +81,21 @@ def create_app() -> FastAPI:
     # SPA static file and catch-all routing (define last so it catches everything else)
     static_path = pathlib.Path("/app/frontend/dist")
 
-    @app.get("/{full_path:path}")
+    @app.api_route("/{full_path:path}", methods=["GET"])
     async def serve_spa(full_path: str):
-        """Serve static files or index.html for SPA routing"""
-        # Check if it's a static asset
+        """Serve static files or index.html for SPA routing (catch-all for non-API routes)"""
+        # Don't serve SPA for API or health routes
+        if full_path.startswith("api") or full_path == "health":
+            from fastapi.responses import JSONResponse
+            return JSONResponse({"error": "Not found"}, status_code=404)
+
+        # Check if it's a static asset file
         file_path = static_path / full_path
         if file_path.exists() and file_path.is_file():
             from fastapi.responses import FileResponse
             return FileResponse(file_path)
 
-        # Serve index.html for client-side routes
+        # Serve index.html for all other routes (SPA client-side routing)
         index_path = static_path / "index.html"
         if index_path.exists():
             from fastapi.responses import HTMLResponse
