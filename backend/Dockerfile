@@ -8,13 +8,14 @@ RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 ENV PATH="/root/.local/bin:$PATH"
 
-COPY pyproject.toml .
-COPY uv.lock .
+COPY pyproject.toml uv.lock ./
 
-RUN uv sync
+RUN uv sync --frozen
 
 COPY . .
 
 EXPOSE 8000
 
-CMD ["uv", "run", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Use the virtual environment's Python directly
+ENV PATH="/app/.venv/bin:$PATH"
+CMD ["python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
