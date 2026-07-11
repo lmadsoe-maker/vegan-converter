@@ -57,7 +57,7 @@ export const CameraCapture = ({ onCapture, onClose }: Props) => {
 
   const capturePhoto = () => {
     console.log('📸 Capture button clicked');
-    
+
     if (!videoRef.current || !canvasRef.current || !isReady) {
       console.log('❌ Camera not ready:', {
         videoRef: !!videoRef.current,
@@ -83,20 +83,28 @@ export const CameraCapture = ({ onCapture, onClose }: Props) => {
       videoHeight: video.videoHeight
     });
 
-    // Set canvas dimensions to match video
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    // Optimize image size: scale down to max 1280px width for faster processing
+    const maxWidth = 1280;
+    const scale = Math.min(1, maxWidth / video.videoWidth);
+    const scaledWidth = video.videoWidth * scale;
+    const scaledHeight = video.videoHeight * scale;
 
-    // Draw video frame to canvas
-    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    // Set canvas to scaled dimensions
+    canvas.width = scaledWidth;
+    canvas.height = scaledHeight;
 
-    // Convert to data URL
-    const imageDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+    // Draw video frame to canvas with scaling
+    context.drawImage(video, 0, 0, scaledWidth, scaledHeight);
+
+    // Convert to data URL with reduced quality to minimize payload
+    const imageDataUrl = canvas.toDataURL('image/jpeg', 0.65);
     console.log('📸 Photo captured successfully:', {
+      originalDimensions: { width: video.videoWidth, height: video.videoHeight },
+      scaledDimensions: { width: scaledWidth, height: scaledHeight },
       dataUrlLength: imageDataUrl.length,
       preview: imageDataUrl.substring(0, 100) + '...'
     });
-    
+
     // Stop camera and return image
     stopCamera();
     onCapture(imageDataUrl);
