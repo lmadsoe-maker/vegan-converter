@@ -59,6 +59,9 @@ async def convert_recipe(request: RecipeConversionRequest) -> RecipeConversionRe
     """
     if not request.original_recipe.strip():
         raise HTTPException(status_code=400, detail="Recipe cannot be empty")
+
+    print(f"[RECIPE_CONVERSION] Input recipe: {request.original_recipe[:100]}...")
+    print(f"[RECIPE_CONVERSION] OpenAI API key set: {'Yes' if os.getenv('OPENAI_API_KEY') else 'No'}")
     
     try:
         # Get available Vegan Weapons for reference
@@ -150,6 +153,8 @@ Converted Plant-Based Recipe:"""
         )
         
         converted_text = response.choices[0].message.content
+        print(f"[RECIPE_CONVERSION] Response received from OpenAI ({len(converted_text)} chars)")
+        print(f"[RECIPE_CONVERSION] First 200 chars of response: {converted_text[:200]}...")
         
         # Parse the response to extract Vegan Weapons used
         vegan_weapons_used = []
