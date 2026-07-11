@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from pydantic import BaseModel
 from typing import List, Optional
 import asyncpg
-import databutton as db
+import os
 from app.env import mode, Mode
 
 router = APIRouter()
@@ -31,9 +31,9 @@ async def get_vegan_weapons(category: Optional[str] = None) -> VeganWeaponsRespo
     
     # Get database connection string based on environment
     if mode == Mode.PROD:
-        database_url = db.secrets.get("DATABASE_URL_PROD")
+        database_url = os.getenv("DATABASE_URL_PROD")
     else:
-        database_url = db.secrets.get("DATABASE_URL_DEV")
+        database_url = os.getenv("DATABASE_URL_DEV")
     
     conn = await asyncpg.connect(database_url)
     
@@ -95,9 +95,9 @@ async def get_vegan_weapon(weapon_id: int) -> VeganWeapon:
     
     # Get database connection string based on environment
     if mode == Mode.PROD:
-        database_url = db.secrets.get("DATABASE_URL_PROD")
+        database_url = os.getenv("DATABASE_URL_PROD")
     else:
-        database_url = db.secrets.get("DATABASE_URL_DEV")
+        database_url = os.getenv("DATABASE_URL_DEV")
     
     conn = await asyncpg.connect(database_url)
     

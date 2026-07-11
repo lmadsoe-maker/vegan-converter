@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from openai import OpenAI
-import databutton as db
+import os
 import base64
 
 router = APIRouter()
@@ -30,7 +30,7 @@ async def analyze_photo(request: PhotoAnalysisRequest) -> PhotoAnalysisResponse:
     
     try:
         # Initialize OpenAI client
-        openai_key = db.secrets.get("OPENAI_API_KEY")
+        openai_key = os.getenv("OPENAI_API_KEY")
         if not openai_key:
             print("❌ OpenAI API key not found")
             raise HTTPException(

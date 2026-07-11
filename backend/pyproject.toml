@@ -9,7 +9,6 @@ dependencies = []
 
 [dependency-groups]
 base = [
-  "databutton==0.40.1",
   "uvicorn[standard]>=0.34.0",
   "fastapi>=0.115.7",
   "pydantic>=2.5.0",
@@ -19,6 +18,7 @@ base = [
   "cryptography>=44.0.0",
   "asyncpg>=0.30.0",
   "dotenv>=0.9.9",
+  "openai>=1.0.0",
 ]
 dev = ["asyncpg-stubs>=0.30.2", "pytest>=8.4.2"]
 app = []

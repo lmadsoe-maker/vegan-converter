@@ -123,17 +123,34 @@ These Riff platform features are not available:
 - ❌ Riff integrations
 - ❌ Automatic schedule execution (set up manually with cron)
 - ❌ Riff workspace features (preview, logs, database explorer)
+- ❌ Databutton SDK (removed in migration)
 
 ## Deployment
 
-The app can be deployed to:
-- Vercel (frontend) + Railway (backend)
-- fly.io
-- Google Cloud Run
-- AWS
-- Any hosting platform
+Deployed on **Railway.app** (same as aila-media) using Docker:
 
-Currently uses Databutton SDK which may need to be removed or adapted for custom deployments.
+```bash
+# Option 1: Deploy via Railway CLI
+railway link  # Connect to Railway project
+railway deploy
+
+# Option 2: Use Docker locally
+docker-compose up
+```
+
+**Environment Variables (set on Railway):**
+- `DATABASE_URL_DEV` — Neon PostgreSQL connection (dev)
+- `DATABASE_URL_PROD` — Neon PostgreSQL connection (prod)
+- `OPENAI_API_KEY` — OpenAI API key for recipe conversion
+- `ENV` — Set to `dev` or `prod`
+
+**Railway Service Configuration:**
+- Backend service: Dockerfile at `backend/Dockerfile` → port 8000
+- Frontend service: Dockerfile at `frontend/Dockerfile` → port 3000
+
+**Database:**
+- Connection strings already configured in `.env.dev` and `.env.prod`
+- Make sure you own/control the Neon database after Riff ejection
 
 ## Quick Start
 

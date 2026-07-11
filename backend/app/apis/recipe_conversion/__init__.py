@@ -1,14 +1,14 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from openai import OpenAI
-import databutton as db
+import os
 import asyncpg
 from app.env import mode, Mode
 
 router = APIRouter()
 
 # Initialize OpenAI client
-client = OpenAI(api_key=db.secrets.get("OPENAI_API_KEY"))
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 class RecipeConversionRequest(BaseModel):
     original_recipe: str
@@ -23,9 +23,9 @@ async def get_vegan_weapons_list():
     """Get all available Vegan Weapons for reference in conversions"""
     # Get database connection string based on environment
     if mode == Mode.PROD:
-        database_url = db.secrets.get("DATABASE_URL_PROD")
+        database_url = os.getenv("DATABASE_URL_PROD")
     else:
-        database_url = db.secrets.get("DATABASE_URL_DEV")
+        database_url = os.getenv("DATABASE_URL_DEV")
     
     conn = await asyncpg.connect(database_url)
     
