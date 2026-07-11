@@ -2,11 +2,15 @@ FROM node:20-alpine AS frontend-builder
 
 WORKDIR /app
 
-RUN corepack enable yarn
+RUN corepack enable
 
-COPY . .
+COPY frontend/package.json frontend/yarn.lock ./
 
-RUN cd frontend && yarn install --frozen-lockfile && VITE_API_URL=https://impartial-magic-production-4d73.up.railway.app yarn build
+RUN yarn install --frozen-lockfile
+
+COPY frontend/ .
+
+RUN VITE_API_URL=https://impartial-magic-production-4d73.up.railway.app yarn build && ls -la dist/
 
 
 FROM python:3.11-slim
